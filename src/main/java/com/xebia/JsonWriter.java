@@ -4,51 +4,63 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
+import org.apache.maven.plugin.logging.Log;
 
 class JsonWriter {
 
-    private final Configuration cfg;
+  private final Configuration cfg;
+  private final Path templateFile;
+  private final Supplier<Log> log;
 
-    JsonWriter() throws IOException, URISyntaxException {
-        // Create your Configuration instance, and specify if up to what FreeMarker
-// version (here 2.3.27) do you want to apply the fixes that are not 100%
-// backward-compatible. See the Configuration JavaDoc for details.
-        cfg = new Configuration(Configuration.VERSION_2_3_27);
+  JsonWriter(Path templateFile, Supplier<Log> log) {
+    this.templateFile = Objects.requireNonNull(templateFile);
+    this.log = log;
+    // Create your Configuration instance, and specify if up to what FreeMarker
+    // version (here 2.3.27) do you want to apply the fixes that are not 100%
+    // backward-compatible. See the Configuration JavaDoc for details.
 
-// Specify the source where the template files come from. Here I set a
-// plain directory for it, but non-file-system sources are possible too:
+    cfg = new Configuration(Configuration.VERSION_2_3_27);
 
-        cfg.setClassForTemplateLoading(this.getClass(), "/");
-//        cfg.setDirectoryForTemplateLoading(new File(this.getClass().getResource("/").toURI()));
+    // Specify the source where the template files come from. Here I set a
+    // plain directory for it, but non-file-system sources are possible too:
 
-        cfg.setDefaultEncoding("UTF-8");
+    cfg.setClassForTemplateLoading(this.getClass(), "/");
 
-// Sets how errors will appear.
-// During web page *development* TemplateExceptionHandler.HTML_DEBUG_HANDLER is better.
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+    cfg.setDefaultEncoding("UTF-8");
 
-// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-        cfg.setLogTemplateExceptions(false);
+    cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
-// Wrap unchecked exceptions thrown during template processing into TemplateException-s.
-        cfg.setWrapUncheckedExceptions(true);
+    // Don't log exceptions inside FreeMarker that it will thrown at you anyway:
+    cfg.setLogTemplateExceptions(false);
+
+    // Wrap unchecked exceptions thrown during template processing into TemplateException-s.
+    cfg.setWrapUncheckedExceptions(true);
+  }
+
+
+  String write(List<TestResult> root) {
+
+    try {
+      Map<String, List<TestResult>> parameters = new HashMap<>();
+      parameters.put("results", root);
+      log.get().info("file:" + templateFile.toString());
+      Template template = cfg.getTemplate(templateFile.getFileName().toString());
+      Writer out = new StringWriter();
+      template.process(parameters, out);
+      out.close();
+      return out.toString();
+    } catch (IOException | TemplateException e) {
+      throw new RuntimeException(e);
     }
 
-
-    void write(List<TestResult> root) throws IOException, TemplateException {
-
-        Map<String, List<TestResult>> parameters = new HashMap<>();
-        parameters.put("results", root);
-        Template template = cfg.getTemplate("template.ftl");
-        Writer out = new OutputStreamWriter(System.out);
-        template.process(parameters, out);
-    }
+  }
 }

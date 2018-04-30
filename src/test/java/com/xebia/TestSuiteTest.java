@@ -1,6 +1,5 @@
 package com.xebia;
 
-
 import org.junit.jupiter.api.Test;
 
 import javax.xml.bind.JAXBContext;
@@ -10,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
  class TestSuiteTest {
 
