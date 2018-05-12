@@ -31,6 +31,7 @@ public class RestPublisher implements Publisher {
 
     @Override
     public void publish(List<TestResultImpl> testResults) {
+        log.get().debug("About to post " + testResults.size() + " testresults");
         HttpPost httpPost = new HttpPost(baseUrl);
         StringEntity entity;
         try {
@@ -39,6 +40,10 @@ public class RestPublisher implements Publisher {
             throw new RuntimeException(e);
         }
         httpPost.setEntity(entity);
+        post(httpPost);
+    }
+
+    private void post(HttpPost httpPost) {
         try (CloseableHttpResponse response2 = httpclient.execute(httpPost)) {
 
             HttpEntity entity2 = response2.getEntity();
