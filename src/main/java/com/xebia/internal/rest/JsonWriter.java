@@ -1,5 +1,6 @@
-package com.xebia;
+package com.xebia.internal.rest;
 
+import com.xebia.internal.parser.TestResultImpl;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -15,13 +16,13 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import org.apache.maven.plugin.logging.Log;
 
-class JsonWriter {
+public class JsonWriter {
 
   private final Configuration cfg;
   private final Path templateFile;
   private final Supplier<Log> log;
 
-  JsonWriter(Path templateFile, Supplier<Log> log) {
+  public JsonWriter(Path templateFile, Supplier<Log> log) {
     this.templateFile = Objects.requireNonNull(templateFile);
     this.log = log;
     // Create your Configuration instance, and specify if up to what FreeMarker
@@ -47,10 +48,10 @@ class JsonWriter {
   }
 
 
-  String write(List<TestResult> root) {
+  public String write(List<TestResultImpl> root) {
 
     try {
-      Map<String, List<TestResult>> parameters = new HashMap<>();
+      Map<String, List<TestResultImpl>> parameters = new HashMap<>();
       parameters.put("results", root);
       log.get().info("file:" + templateFile.toString());
       Template template = cfg.getTemplate(templateFile.getFileName().toString());

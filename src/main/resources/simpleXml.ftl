@@ -3,7 +3,7 @@
         <result>
             <id>${result.id}</id>
             <name>${result.name}</name>
-            <success>${result.success?c}</success>
+            <success>${result.success}</success>
             <time>${result.testInstant}</time>
         </result>
     </#list>

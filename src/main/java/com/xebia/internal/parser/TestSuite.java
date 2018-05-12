@@ -1,4 +1,4 @@
-package com.xebia;
+package com.xebia.internal.parser;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;

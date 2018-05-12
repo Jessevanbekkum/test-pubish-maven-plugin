@@ -3,7 +3,7 @@
   {
     "id": "${result.id}"
     "name": "${result.name}",
-    "success": ${result.success?c},
+    "success": "${result.success}",
     "time": "${result.testInstant}"
   }
 </#list>

@@ -1,19 +1,19 @@
 package com.xebia;
 
-import org.junit.jupiter.api.Test;
-
+import com.xebia.internal.parser.TestSuite;
+import java.io.FileInputStream;
+import java.io.IOException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.FileInputStream;
-import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
- class TestSuiteTest {
+class TestSuiteTest {
 
     @Test
-     void shouldParseFile() throws IOException, JAXBException {
+    void shouldParseFile() throws IOException, JAXBException {
 
         try (FileInputStream adrFile = new FileInputStream(this.getClass().getResource("/TEST-com.xebia.ApplicationIT.xml").getFile())) {
             JAXBContext ctx = JAXBContext.newInstance(TestSuite.class);

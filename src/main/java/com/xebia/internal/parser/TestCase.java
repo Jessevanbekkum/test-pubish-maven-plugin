@@ -1,4 +1,4 @@
-package com.xebia;
+package com.xebia.internal.parser;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;

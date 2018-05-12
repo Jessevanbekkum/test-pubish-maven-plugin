@@ -1,52 +1,54 @@
 package com.xebia;
 
-import org.apache.maven.plugin.logging.SystemStreamLog;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
+import com.xebia.api.Result;
+import com.xebia.internal.parser.TestResultImpl;
+import com.xebia.internal.rest.JsonWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.maven.plugin.logging.SystemStreamLog;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("The jsonwriter")
 class JsonWriterTest {
 
-  private Path path = Paths.get(this.getClass().getResource("/simpleJson.ftl").toURI());
+    private Path path = Paths.get(this.getClass().getResource("/simpleJson.ftl").toURI());
 
-  JsonWriterTest() throws URISyntaxException {
-  }
+    JsonWriterTest() throws URISyntaxException {
+    }
 
-  @Test
-  @DisplayName("should write successful testresults")
-  void writeSuccessTest() {
-    TestResult tr1 = new TestResult("Success", true, Instant.now());
+    @Test
+    @DisplayName("should write successful testresults")
+    void writeSuccessTest() {
+        TestResultImpl tr1 = new TestResultImpl("Success", Result.SUCCESS, Instant.now());
 
-    List<TestResult> c = new ArrayList<>();
-    c.add(tr1);
+        List<TestResultImpl> c = new ArrayList<>();
+        c.add(tr1);
 
-    JsonWriter jw = new JsonWriter(path, new SystemStreamLog());
-    String result = jw.write(c);
-    assertThat(result).contains("\"success\": true,");
+        JsonWriter jw = new JsonWriter(path, SystemStreamLog::new);
+        String result = jw.write(c);
+        assertThat(result).contains("\"success\": \"SUCCESS\",");
 
-  }
+    }
 
-  @Test
-  @DisplayName("should write failed testresult")
-  void writeFailTest() {
-    TestResult tr2 = new TestResult("Fail", false, Instant.now());
+    @Test
+    @DisplayName("should write failed testresult")
+    void writeFailTest() {
+        TestResultImpl tr2 = new TestResultImpl("Fail", Result.FAILURE, Instant.now());
 
-    List<TestResult> c = new ArrayList<>();
-    c.add(tr2);
+        List<TestResultImpl> c = new ArrayList<>();
+        c.add(tr2);
 
-    JsonWriter jw = new JsonWriter(path, new SystemStreamLog());
-    String result = jw.write(c);
-    assertThat(result).contains("\"success\": false,");
+        JsonWriter jw = new JsonWriter(path, SystemStreamLog::new);
+        String result = jw.write(c);
+        assertThat(result).contains("\"success\": \"FAILURE\",");
 
-    System.out.println(result);
-  }
+        System.out.println(result);
+    }
 }

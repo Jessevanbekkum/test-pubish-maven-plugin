@@ -1,7 +1,8 @@
 package com.xebia;
 
+import com.xebia.internal.parser.TestResultImpl;
 import java.util.List;
 
 public interface Publisher {
-  void publish(List<TestResult> testResults);
+  void publish(List<TestResultImpl> testResults);
 }
