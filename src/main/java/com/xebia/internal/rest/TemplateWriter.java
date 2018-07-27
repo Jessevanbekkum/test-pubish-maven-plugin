@@ -16,13 +16,13 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import org.apache.maven.plugin.logging.Log;
 
-public class JsonWriter {
+public class TemplateWriter {
 
   private final Configuration cfg;
   private final Path templateFile;
   private final Supplier<Log> log;
 
-  public JsonWriter(Path templateFile, Supplier<Log> log) {
+  public TemplateWriter(Path templateFile, Supplier<Log> log) {
     this.templateFile = Objects.requireNonNull(templateFile);
     this.log = log;
     // Create your Configuration instance, and specify if up to what FreeMarker

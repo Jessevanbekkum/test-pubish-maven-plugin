@@ -1,4 +1,4 @@
-package com.xebia;
+package com.xebia.internal;
 
 import com.xebia.internal.parser.TestResultImpl;
 import java.util.List;

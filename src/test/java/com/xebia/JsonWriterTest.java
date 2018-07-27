@@ -2,7 +2,7 @@ package com.xebia;
 
 import com.xebia.api.Result;
 import com.xebia.internal.parser.TestResultImpl;
-import com.xebia.internal.rest.JsonWriter;
+import com.xebia.internal.rest.TemplateWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +31,7 @@ class JsonWriterTest {
         List<TestResultImpl> c = new ArrayList<>();
         c.add(tr1);
 
-        JsonWriter jw = new JsonWriter(path, SystemStreamLog::new);
+        TemplateWriter jw = new TemplateWriter(path, SystemStreamLog::new);
         String result = jw.write(c);
         assertThat(result).contains("\"success\": \"SUCCESS\",");
 
@@ -45,7 +45,7 @@ class JsonWriterTest {
         List<TestResultImpl> c = new ArrayList<>();
         c.add(tr2);
 
-        JsonWriter jw = new JsonWriter(path, SystemStreamLog::new);
+        TemplateWriter jw = new TemplateWriter(path, SystemStreamLog::new);
         String result = jw.write(c);
         assertThat(result).contains("\"success\": \"FAILURE\",");
 

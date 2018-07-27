@@ -41,6 +41,7 @@ public class TestLogMojo extends AbstractMojo {
 
         Objects.requireNonNull(mode);
         Objects.requireNonNull(endpoint, "Please supply an url");
+
         MojoExecuter mojoExecuter = new MojoExecuter(template.toPath(), this::getLog, createUri(endpoint),
             time.toInstant(), testDirectory.toPath(), continueOnFailure);
 

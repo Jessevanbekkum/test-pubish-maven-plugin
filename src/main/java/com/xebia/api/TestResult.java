@@ -13,10 +13,15 @@ public interface TestResult {
     String getName();
 
     /**
-     * Instant the complete suite was started. This is not the moment this particular test started
+     * Instant the complete suite was started. This is not the moment this particular test started, but when the whole
+     * suite was started. This allows to correlate different results of one run.
      * @return
      */
     Instant getTestInstant();
 
+    /**
+     * A random UUID of this test result
+     * @return
+     */
     UUID getId();
 }

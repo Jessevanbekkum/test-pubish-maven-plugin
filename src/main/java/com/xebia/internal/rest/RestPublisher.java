@@ -1,9 +1,10 @@
 package com.xebia.internal.rest;
 
-import com.xebia.Publisher;
+import com.xebia.internal.Publisher;
 import com.xebia.internal.parser.TestResultImpl;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
 import org.apache.http.HttpEntity;
@@ -17,13 +18,20 @@ import org.apache.maven.plugin.logging.Log;
 
 public class RestPublisher implements Publisher {
     private CloseableHttpClient httpclient = HttpClients.createDefault();
-    private final JsonWriter jsonWriter;
+    private final TemplateWriter templateWriter;
     private final URI baseUrl;
     private final boolean continueOnFailure;
     private final Supplier<Log> log;
 
-    public RestPublisher(JsonWriter jsonWriter, URI baseUrl, boolean continueOnFailure, Supplier<Log> log) {
-        this.jsonWriter = jsonWriter;
+    /**
+     *
+     * @param templateFile
+     * @param baseUrl
+     * @param continueOnFailure
+     * @param log
+     */
+    public RestPublisher(Path templateFile, URI baseUrl, boolean continueOnFailure, Supplier<Log> log) {
+        this.templateWriter = new TemplateWriter(templateFile, log);
         this.baseUrl = baseUrl;
         this.continueOnFailure = continueOnFailure;
         this.log = log;
@@ -35,7 +43,7 @@ public class RestPublisher implements Publisher {
         HttpPost httpPost = new HttpPost(baseUrl);
         StringEntity entity;
         try {
-            entity = new StringEntity(jsonWriter.write(testResults));
+            entity = new StringEntity(templateWriter.write(testResults));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

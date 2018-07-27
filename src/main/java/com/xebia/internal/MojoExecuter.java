@@ -2,7 +2,6 @@ package com.xebia.internal;
 
 import com.xebia.internal.parser.TestResultImpl;
 import com.xebia.internal.parser.TestResultParser;
-import com.xebia.internal.rest.JsonWriter;
 import com.xebia.internal.rest.RestPublisher;
 import java.net.URI;
 import java.nio.file.Path;
@@ -41,9 +40,8 @@ public class MojoExecuter {
      *
      */
     public void execute() {
-        JsonWriter jsonWriter = new JsonWriter(template, log);
 
-        RestPublisher restPublisher = new RestPublisher(jsonWriter, endpoint, continueOnFailure, log);
+        RestPublisher restPublisher = new RestPublisher(template, endpoint, continueOnFailure, log);
 
         TestResultParser testResultParser = new TestResultParser(testDirectory, log, time);
 
